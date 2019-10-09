@@ -5921,119 +5921,18 @@
 
 .method static isAllowedDisable(Ljava/lang/String;I)Z
     .registers 4
-    .param p0, "packageName"    # Ljava/lang/String;
-    .param p1, "newState"    # I
 
-    .line 1075
     const/4 v0, 0x1
 
-    if-eqz p1, :cond_e
-
-    if-ne p1, v0, :cond_6
-
-    goto :goto_e
-
-    .line 1078
-    :cond_6
-    sget-object v1, Lcom/android/server/pm/PackageManagerServiceInjector;->sNotDisable:Ljava/util/ArrayList;
-
-    invoke-virtual {v1, p0}, Ljava/util/ArrayList;->contains(Ljava/lang/Object;)Z
-
-    move-result v1
-
-    xor-int/2addr v0, v1
-
-    return v0
-
-    .line 1076
-    :cond_e
-    :goto_e
     return v0
 .end method
 
 .method static isAllowedHideApp(Lcom/android/server/pm/PackageManagerService;Ljava/lang/String;ZI)Z
     .registers 9
-    .param p0, "service"    # Lcom/android/server/pm/PackageManagerService;
-    .param p1, "packageName"    # Ljava/lang/String;
-    .param p2, "hidden"    # Z
-    .param p3, "userId"    # I
 
-    .line 1124
-    const/4 v0, 0x0
+    const/4 v0, 0x1
 
-    invoke-virtual {p0, p1, v0, p3}, Lcom/android/server/pm/PackageManagerService;->getApplicationInfo(Ljava/lang/String;II)Landroid/content/pm/ApplicationInfo;
-
-    move-result-object v1
-
-    .line 1125
-    .local v1, "info":Landroid/content/pm/ApplicationInfo;
-    const/4 v2, 0x1
-
-    if-nez v1, :cond_a
-
-    :cond_8
-    move v3, v0
-
-    goto :goto_10
-
-    :cond_a
-    iget v3, v1, Landroid/content/pm/ApplicationInfo;->flags:I
-
-    and-int/2addr v3, v2
-
-    if-eqz v3, :cond_8
-
-    move v3, v2
-
-    .line 1126
-    .local v3, "isSystem":Z
-    :goto_10
-    const-string v4, "com.android.browser"
-
-    invoke-virtual {v4, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v4
-
-    if-nez v4, :cond_20
-
-    const-string v4, "com.android.chrome"
-
-    invoke-virtual {v4, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v4
-
-    if-eqz v4, :cond_21
-
-    .line 1127
-    :cond_20
-    const/4 v3, 0x0
-
-    .line 1129
-    :cond_21
-    if-eqz p2, :cond_33
-
-    if-nez v3, :cond_2b
-
-    invoke-static {}, Landroid/miui/AppOpsUtils;->isXOptMode()Z
-
-    move-result v4
-
-    if-nez v4, :cond_33
-
-    .line 1130
-    :cond_2b
-    sget-object v2, Lcom/android/server/pm/PackageManagerServiceInjector;->TAG:Ljava/lang/String;
-
-    const-string v4, "MIUILOG- Not Support"
-
-    invoke-static {v2, v4}, Landroid/util/Slog;->w(Ljava/lang/String;Ljava/lang/String;)I
-
-    .line 1131
     return v0
-
-    .line 1133
-    :cond_33
-    return v2
 .end method
 
 .method public static isAllowedInstall(Landroid/content/Context;Ljava/io/File;ILjava/lang/String;)Z

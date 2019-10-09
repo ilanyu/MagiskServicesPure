@@ -4192,49 +4192,9 @@
 .method private getScreenshotChordLongPressDelay()J
     .registers 4
 
-    .line 1849
-    iget-object v0, p0, Lcom/android/server/policy/PhoneWindowManager;->mKeyguardDelegate:Lcom/android/server/policy/keyguard/KeyguardServiceDelegate;
+    const-wide/16 v1, 0x0
 
-    invoke-virtual {v0}, Lcom/android/server/policy/keyguard/KeyguardServiceDelegate;->isShowing()Z
-
-    move-result v0
-
-    if-eqz v0, :cond_18
-
-    .line 1851
-    const/high16 v0, 0x40200000    # 2.5f
-
-    iget-object v1, p0, Lcom/android/server/policy/PhoneWindowManager;->mContext:Landroid/content/Context;
-
-    .line 1852
-    invoke-static {v1}, Landroid/view/ViewConfiguration;->get(Landroid/content/Context;)Landroid/view/ViewConfiguration;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Landroid/view/ViewConfiguration;->getDeviceGlobalActionKeyTimeout()J
-
-    move-result-wide v1
-
-    long-to-float v1, v1
-
-    mul-float/2addr v0, v1
-
-    float-to-long v0, v0
-
-    .line 1851
-    return-wide v0
-
-    .line 1854
-    :cond_18
-    iget-object v0, p0, Lcom/android/server/policy/PhoneWindowManager;->mContext:Landroid/content/Context;
-
-    invoke-static {v0}, Landroid/view/ViewConfiguration;->get(Landroid/content/Context;)Landroid/view/ViewConfiguration;
-
-    move-result-object v0
-
-    invoke-virtual {v0}, Landroid/view/ViewConfiguration;->getDeviceGlobalActionKeyTimeout()J
-
-    move-result-wide v0
+    move-wide v0, v1
 
     return-wide v0
 .end method
