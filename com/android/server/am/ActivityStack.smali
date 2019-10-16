@@ -6514,6 +6514,10 @@
     move-result-object v10
 
     invoke-virtual {v10, v0}, Lcom/android/server/am/ClientLifecycleManager;->scheduleTransaction(Landroid/app/servertransaction/ClientTransaction;)V
+
+    iget-object v10, v12, Lcom/android/server/am/ActivityRecord;->appToken:Landroid/view/IApplicationToken$Stub;
+
+    invoke-static {v10}, Lcom/android/server/am/PreventRunningUtils;->onResumeActivity(Landroid/os/IBinder;)V
     :try_end_46b
     .catch Ljava/lang/Exception; {:try_start_42c .. :try_end_46b} :catch_49e
     .catchall {:try_start_42c .. :try_end_46b} :catchall_4ed
@@ -8923,6 +8927,10 @@
 
     .line 4660
     invoke-virtual {v5, v6, v7, v8}, Lcom/android/server/am/ClientLifecycleManager;->scheduleTransaction(Landroid/app/IApplicationThread;Landroid/os/IBinder;Landroid/app/servertransaction/ActivityLifecycleItem;)V
+
+    iget-object v5, p1, Lcom/android/server/am/ActivityRecord;->appToken:Landroid/view/IApplicationToken$Stub;
+
+    invoke-static {v5}, Lcom/android/server/am/PreventRunningUtils;->onDestroyActivity(Landroid/os/IBinder;)V
 
     .line 4663
     iget-object v5, p1, Lcom/android/server/am/ActivityRecord;->info:Landroid/content/pm/ActivityInfo;
@@ -20832,6 +20840,12 @@
 
     .line 1588
     invoke-virtual {v4, v5, v6, v7}, Lcom/android/server/am/ClientLifecycleManager;->scheduleTransaction(Landroid/app/IApplicationThread;Landroid/os/IBinder;Landroid/app/servertransaction/ActivityLifecycleItem;)V
+
+    iget-object v4, v0, Lcom/android/server/am/ActivityRecord;->appToken:Landroid/view/IApplicationToken$Stub;
+
+    iget-boolean v5, v0, Lcom/android/server/am/ActivityRecord;->finishing:Z
+
+    invoke-static {v4, v5, p1}, Lcom/android/server/am/PreventRunningUtils;->onUserLeavingActivity(Landroid/os/IBinder;ZZ)V
     :try_end_11e
     .catch Ljava/lang/Exception; {:try_start_dc .. :try_end_11e} :catch_11f
 

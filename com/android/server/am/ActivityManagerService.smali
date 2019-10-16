@@ -42855,6 +42855,25 @@
 .end method
 
 .method private final handleAppDiedLocked(Lcom/android/server/am/ProcessRecord;ZZ)V
+    .registers 5
+
+    invoke-direct {p0, p1, p2, p3}, Lcom/android/server/am/ActivityManagerService;->handleAppDiedLocked$Pr(Lcom/android/server/am/ProcessRecord;ZZ)V
+
+    if-nez p2, :cond_e
+
+    if-eqz p3, :cond_e
+
+    iget-boolean v0, p1, Lcom/android/server/am/ProcessRecord;->killedByAm:Z
+
+    if-nez v0, :cond_e
+
+    invoke-static {p1}, Lcom/android/server/am/PreventRunningUtils;->onAppDied(Lcom/android/server/am/ProcessRecord;)V
+
+    :cond_e
+    return-void
+.end method
+
+.method private final handleAppDiedLocked$Pr(Lcom/android/server/am/ProcessRecord;ZZ)V
     .registers 11
     .param p1, "app"    # Lcom/android/server/am/ProcessRecord;
     .param p2, "restarting"    # Z
@@ -45003,7 +45022,7 @@
     iget-object v7, v13, Lcom/android/server/am/ProcessRecord;->pkgDeps:Landroid/util/ArraySet;
 
     .line 7450
-    invoke-virtual {v7, v1}, Landroid/util/ArraySet;->contains(Ljava/lang/Object;)Z
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->returnFalse()Z
 
     move-result v7
 
@@ -60930,6 +60949,44 @@
 .end method
 
 .method public bindService(Landroid/app/IApplicationThread;Landroid/os/IBinder;Landroid/content/Intent;Ljava/lang/String;Landroid/app/IServiceConnection;ILjava/lang/String;I)I
+    .registers 10
+
+    :try_start_0
+    invoke-static {p1}, Lcom/android/server/am/PreventRunningUtils;->setSender(Landroid/app/IApplicationThread;)V
+
+    invoke-static {p1, p2, p3}, Lcom/android/server/am/PreventRunningUtils;->hookBindService(Landroid/app/IApplicationThread;Landroid/os/IBinder;Landroid/content/Intent;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_11
+
+    invoke-virtual/range {p0 .. p8}, Lcom/android/server/am/ActivityManagerService;->bindService$Pr(Landroid/app/IApplicationThread;Landroid/os/IBinder;Landroid/content/Intent;Ljava/lang/String;Landroid/app/IServiceConnection;ILjava/lang/String;I)I
+    :try_end_c
+    .catchall {:try_start_0 .. :try_end_c} :catchall_16
+
+    move-result v0
+
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    :goto_10
+    return v0
+
+    :cond_11
+    const/4 v0, 0x0
+
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    goto :goto_10
+
+    :catchall_16
+    move-exception v0
+
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    throw v0
+.end method
+
+.method public bindService$Pr(Landroid/app/IApplicationThread;Landroid/os/IBinder;Landroid/content/Intent;Ljava/lang/String;Landroid/app/IServiceConnection;ILjava/lang/String;I)I
     .registers 29
     .param p1, "caller"    # Landroid/app/IApplicationThread;
     .param p2, "token"    # Landroid/os/IBinder;
@@ -61139,6 +61196,35 @@
 .end method
 
 .method public final broadcastIntent(Landroid/app/IApplicationThread;Landroid/content/Intent;Ljava/lang/String;Landroid/content/IIntentReceiver;ILjava/lang/String;Landroid/os/Bundle;[Ljava/lang/String;ILandroid/os/Bundle;ZZI)I
+    .registers 15
+
+    :try_start_0
+    invoke-static {p1}, Lcom/android/server/am/PreventRunningUtils;->setSender(Landroid/app/IApplicationThread;)V
+
+    invoke-virtual/range {p0 .. p13}, Lcom/android/server/am/ActivityManagerService;->broadcastIntent$Pr(Landroid/app/IApplicationThread;Landroid/content/Intent;Ljava/lang/String;Landroid/content/IIntentReceiver;ILjava/lang/String;Landroid/os/Bundle;[Ljava/lang/String;ILandroid/os/Bundle;ZZI)I
+
+    move-result v0
+
+    if-nez v0, :cond_c
+
+    invoke-static {p2}, Lcom/android/server/am/PreventRunningUtils;->onBroadcastIntent(Landroid/content/Intent;)V
+    :try_end_c
+    .catchall {:try_start_0 .. :try_end_c} :catchall_10
+
+    :cond_c
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    return v0
+
+    :catchall_10
+    move-exception v0
+
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    throw v0
+.end method
+
+.method public final broadcastIntent$Pr(Landroid/app/IApplicationThread;Landroid/content/Intent;Ljava/lang/String;Landroid/content/IIntentReceiver;ILjava/lang/String;Landroid/os/Bundle;[Ljava/lang/String;ILandroid/os/Bundle;ZZI)I
     .registers 35
     .param p1, "caller"    # Landroid/app/IApplicationThread;
     .param p2, "intent"    # Landroid/content/Intent;
@@ -100969,6 +101055,28 @@
 .end method
 
 .method public moveActivityTaskToBack(Landroid/os/IBinder;Z)Z
+    .registers 4
+
+    invoke-virtual {p0, p1, p2}, Lcom/android/server/am/ActivityManagerService;->moveActivityTaskToBack$Pr(Landroid/os/IBinder;Z)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_b
+
+    invoke-static {p1}, Lcom/android/server/am/PreventRunningUtils;->onMoveActivityTaskToBack(Landroid/os/IBinder;)V
+
+    const/4 v0, 0x1
+
+    :goto_a
+    return v0
+
+    :cond_b
+    const/4 v0, 0x0
+
+    goto :goto_a
+.end method
+
+.method public moveActivityTaskToBack$Pr(Landroid/os/IBinder;Z)Z
     .registers 8
     .param p1, "token"    # Landroid/os/IBinder;
     .param p2, "nonRoot"    # Z
@@ -122568,6 +122676,20 @@
 .end method
 
 .method public final startActivity(Landroid/app/IApplicationThread;Ljava/lang/String;Landroid/content/Intent;Ljava/lang/String;Landroid/os/IBinder;Ljava/lang/String;IILandroid/app/ProfilerInfo;Landroid/os/Bundle;)I
+    .registers 12
+
+    invoke-virtual/range {p0 .. p10}, Lcom/android/server/am/ActivityManagerService;->startActivity$Pr(Landroid/app/IApplicationThread;Ljava/lang/String;Landroid/content/Intent;Ljava/lang/String;Landroid/os/IBinder;Ljava/lang/String;IILandroid/app/ProfilerInfo;Landroid/os/Bundle;)I
+
+    move-result v0
+
+    invoke-static {v0, p1, p2, p3}, Lcom/android/server/am/PreventRunningUtils;->onStartActivity(ILandroid/app/IApplicationThread;Ljava/lang/String;Landroid/content/Intent;)I
+
+    move-result v0
+
+    return v0
+.end method
+
+.method public final startActivity$Pr(Landroid/app/IApplicationThread;Ljava/lang/String;Landroid/content/Intent;Ljava/lang/String;Landroid/os/IBinder;Ljava/lang/String;IILandroid/app/ProfilerInfo;Landroid/os/Bundle;)I
     .registers 23
     .param p1, "caller"    # Landroid/app/IApplicationThread;
     .param p2, "callingPackage"    # Ljava/lang/String;
@@ -126856,6 +126978,28 @@
 .end method
 
 .method final startProcessLocked(Ljava/lang/String;Landroid/content/pm/ApplicationInfo;ZILjava/lang/String;Landroid/content/ComponentName;ZZIZLjava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Runnable;Ljava/lang/String;)Lcom/android/server/am/ProcessRecord;
+    .registers 18
+
+    invoke-static/range {p1 .. p6}, Lcom/android/server/am/PreventRunningUtils;->hookStartProcessLocked(Ljava/lang/String;Landroid/content/pm/ApplicationInfo;ZILjava/lang/String;Landroid/content/ComponentName;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_b
+
+    invoke-virtual/range {p0 .. p15}, Lcom/android/server/am/ActivityManagerService;->startProcessLocked$Pr(Ljava/lang/String;Landroid/content/pm/ApplicationInfo;ZILjava/lang/String;Landroid/content/ComponentName;ZZIZLjava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Runnable;Ljava/lang/String;)Lcom/android/server/am/ProcessRecord;
+
+    move-result-object v0
+
+    :goto_a
+    return-object v0
+
+    :cond_b
+    const/4 v0, 0x0
+
+    goto :goto_a
+.end method
+
+.method final startProcessLocked$Pr(Ljava/lang/String;Landroid/content/pm/ApplicationInfo;ZILjava/lang/String;Landroid/content/ComponentName;ZZIZLjava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Runnable;Ljava/lang/String;)Lcom/android/server/am/ProcessRecord;
     .registers 35
     .param p1, "processName"    # Ljava/lang/String;
     .param p2, "info"    # Landroid/content/pm/ApplicationInfo;
@@ -127569,6 +127713,44 @@
 .end method
 
 .method public startService(Landroid/app/IApplicationThread;Landroid/content/Intent;Ljava/lang/String;ZLjava/lang/String;I)Landroid/content/ComponentName;
+    .registers 8
+
+    .prologue
+    :try_start_0
+    invoke-static {p1}, Lcom/android/server/am/PreventRunningUtils;->setSender(Landroid/app/IApplicationThread;)V
+
+    invoke-static {p1, p2}, Lcom/android/server/am/PreventRunningUtils;->hookStartService(Landroid/app/IApplicationThread;Landroid/content/Intent;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    invoke-virtual/range {p0 .. p6}, Lcom/android/server/am/ActivityManagerService;->startService$Pr(Landroid/app/IApplicationThread;Landroid/content/Intent;Ljava/lang/String;ZLjava/lang/String;I)Landroid/content/ComponentName;
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    move-result-object v0
+
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    return-object v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    return-object v0
+
+    :catchall_0
+    move-exception v0
+
+    invoke-static {}, Lcom/android/server/am/PreventRunningUtils;->clearSender()V
+
+    throw v0
+.end method
+
+.method public startService$Pr(Landroid/app/IApplicationThread;Landroid/content/Intent;Ljava/lang/String;ZLjava/lang/String;I)Landroid/content/ComponentName;
     .registers 27
     .param p1, "caller"    # Landroid/app/IApplicationThread;
     .param p2, "service"    # Landroid/content/Intent;

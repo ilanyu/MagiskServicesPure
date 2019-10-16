@@ -339,7 +339,7 @@
 
     .line 730
     .local v13, "packageName":Ljava/lang/String;
-    invoke-virtual/range {p1 .. p1}, Landroid/content/Intent;->isExcludingStopped()Z
+    invoke-static/range {p1 .. p1}, Lcom/android/server/am/PreventRunningUtils;->isExcludingStopped(Landroid/content/Intent;)Z
 
     move-result v14
 
@@ -782,7 +782,7 @@
     .end local v10    # "logPrinter":Landroid/util/Printer;
     .local v13, "logPrinter":Landroid/util/Printer;
     .restart local v21    # "packageName":Ljava/lang/String;
-    invoke-virtual/range {v4 .. v10}, Landroid/content/IntentFilter;->match(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/net/Uri;Ljava/util/Set;Ljava/lang/String;)I
+    invoke-static/range {v4 .. v10}, Lcom/android/server/am/PreventRunningUtils;->match(Landroid/content/IntentFilter;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/net/Uri;Ljava/util/Set;Ljava/lang/String;)I
 
     move-result v1
 
